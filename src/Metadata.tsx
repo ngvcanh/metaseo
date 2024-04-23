@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { MetaAndroid, MetaApple, MetaCSP, MetaEquiv, MetaIcon } from "./types";
+import { MetadataConfiguration } from "./types";
 import {
   META_ANDROID_DEFAULT_CAPABLE,
   META_ANDROID_DEFAULT_FULLSCREEN,
@@ -15,32 +15,12 @@ import {
 import { generateMetaCSP, getOgImageSize } from "./utils";
 
 export interface MetadataProps {
-  charSet?: string;
-  name?: string;
-  title?: string;
-  keywords?: string | string[];
-  description?: string;
-  image?: string;
-  canonical?: string;
-  viewport?: true | string;
-  hreflang?: Record<string, string>;
-  disableOg?: boolean;
-  og?: Record<string, string>;
-  robots?: string;
-  revisit?: "off" | string;
-  rating?: "off" | string;
-  distribution?: "off" | string;
-  copyright?: string;
-  apple?: MetaApple;
-  android?: MetaAndroid;
-  equiv?: MetaEquiv;
-  icon?: MetaIcon;
-  shortcut?: string;
-  csp?: MetaCSP;
-  userAgent?: string;
+  config: MetadataConfiguration;
 }
 
 const Metadata: FC<MetadataProps> = (props) => {
+  const { config } = props;
+
   const {
     charSet = META_EQUIV_DEFAULT_TYPE,
     name,
@@ -65,7 +45,8 @@ const Metadata: FC<MetadataProps> = (props) => {
     shortcut,
     csp,
     userAgent,
-  } = props;
+    mode,
+  } = config;
 
   const keywordString = Array.isArray(keywords) ? keywords.join(", ") : keywords;
   const ogImageSize = getOgImageSize(userAgent);
@@ -92,6 +73,7 @@ const Metadata: FC<MetadataProps> = (props) => {
           />
           {equiv.language ? <meta http-equiv="Content-Language" content={equiv.language} /> : null}
           {(equiv.ie ?? META_EQUIV_DEFAULT_IE) ? <meta http-equiv="X-UA-Compatible" content="IE=edge" /> : null}
+          {equiv.clearType ? <meta http-equiv="cleartype" content="on" /> : null}
         </>
       ) : null}
 
@@ -99,9 +81,14 @@ const Metadata: FC<MetadataProps> = (props) => {
       {revisit !== "off" ? <meta name="REVISIT-AFTER" content={revisit} /> : null}
       {rating !== "off" ? <meta name="RATING" content="GENERAL" /> : null}
       {distribution !== "off" ? <meta name="distribution" content={distribution} /> : null}
-      <meta name="browsermode" content="application" />
-      <meta name="layoutmode" content="fitscreen" />
-      <meta name="imagemode" content="force" />
+      
+      {mode ? (
+        <>
+          <meta name="browsermode" content="application" />
+          <meta name="layoutmode" content="fitscreen" />
+          <meta name="imagemode" content="force" />
+        </>
+      ) : null}
 
       {viewport ? (
         <meta
@@ -144,7 +131,7 @@ const Metadata: FC<MetadataProps> = (props) => {
       {Object.keys(hreflang).map((key) => (
         <link {...{
           rel: "alternate",
-          hreflang: key,
+          hrefLang: key,
           href: hreflang[key],
           key,
         }} />

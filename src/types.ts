@@ -28,6 +28,7 @@ export interface MetaEquiv {
   type?: string;
   language?: string;
   ie?: boolean;
+  clearType?: boolean;
 }
 
 export interface MetaCSPSrc<Source, IsArray extends boolean = true> {
@@ -57,4 +58,31 @@ export interface MetaCSP {
   minifestSrc?: string;
   prefetchSrc?: string;
   navigateTo?: string;
+}
+
+export interface MetadataConfiguration {
+  charSet?: string;
+  name?: string;
+  title?: string;
+  keywords?: string | string[];
+  description?: string;
+  image?: string;
+  canonical?: string;
+  viewport?: true | string;
+  hreflang?: Record<string, string>;
+  disableOg?: boolean;
+  og?: Record<string, string>;
+  robots?: string;
+  revisit?: "off" | string;
+  rating?: "off" | string;
+  distribution?: "off" | string;
+  copyright?: string;
+  apple?: MetaApple;
+  android?: MetaAndroid;
+  equiv?: MetaEquiv;
+  icon?: MetaIcon;
+  shortcut?: string;
+  csp?: MetaCSP;
+  userAgent?: string;
+  mode?: boolean;
 }

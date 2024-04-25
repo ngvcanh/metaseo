@@ -63,7 +63,7 @@ const Metadata: FC<MetadataProps> = (props) => {
 
   return (
     <>
-      <meta charSet={charSet} />
+      {charSet !== "off" ? <meta charSet={charSet} /> : null}
 
       {equiv ? (
         <>

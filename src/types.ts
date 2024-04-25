@@ -61,7 +61,7 @@ export interface MetaCSP {
 }
 
 export interface MetadataConfiguration {
-  charSet?: string;
+  charSet?: "off" | string;
   name?: string;
   title?: string;
   keywords?: string | string[];
